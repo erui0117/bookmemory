@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 책탑 암호에서 만들어진 64자리 방 이름을 아는 사람만 그 방의 기록을 읽고 쓸 수 있습니다.
+    match /rooms/{room}/books/{id} {
+      allow read, write: if request.auth != null && room.size() == 64;
+    }
+    match /rooms/{room}/members/{id} {
+      allow read, write: if request.auth != null && room.size() == 64;
+    }
+  }
+}
