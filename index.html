@@ -547,6 +547,13 @@ function jsonp(url){return new Promise(function(res,rej){
 });}
 function cleanAuthor(a){return String(a||"").replace(/\s*\([^)]*\)/g,"").trim();}
 async function searchBooks(q){
+  if(CFG.kakaoKey){
+    var kr=await fetch("https://dapi.kakao.com/v3/search/book?size=10&query="+encodeURIComponent(q),{headers:{Authorization:"KakaoAK "+CFG.kakaoKey}});
+    if(!kr.ok)throw new Error("http "+kr.status);
+    var kj=await kr.json();
+    return (kj.documents||[]).map(function(x){var ib=String(x.isbn||"").trim().split(/\s+/);
+      return {title:x.title,author:(x.authors||[]).join(", "),pub:x.publisher||"",cover:x.thumbnail||"",isbn:ib[ib.length-1]||"",pages:0};});
+  }
   if(CFG.aladinKey){
     var d=await jsonp("https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey="+encodeURIComponent(CFG.aladinKey)+"&Query="+encodeURIComponent(q)+"&QueryType=Keyword&MaxResults=10&start=1&SearchTarget=Book&Cover=Big&output=js&Version=20131101");
     return (d&&d.item||[]).map(function(x){return {title:x.title,author:cleanAuthor(x.author),pub:x.publisher,cover:x.cover,isbn:x.isbn13||x.isbn,pages:(x.subInfo&&x.subInfo.itemPage)||0,aid:x.itemId};});
@@ -580,6 +587,11 @@ async function pickRes(i){
     try{var d=await jsonp("https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey="+encodeURIComponent(CFG.aladinKey)+"&itemIdType=ItemId&ItemId="+encodeURIComponent(r.aid)+"&output=js&Version=20131101");
       var pg=d&&d.item&&d.item[0]&&d.item[0].subInfo&&d.item[0].subInfo.itemPage;
       if(pg&&!$("#fPages").value)$("#fPages").value=pg;}catch(e){}
+  }
+  if(!$("#fPages").value&&r.isbn&&!r.pages){
+    try{var gr=await fetch("https://www.googleapis.com/books/v1/volumes?maxResults=1&q=isbn:"+encodeURIComponent(r.isbn));
+      if(gr.ok){var gj=await gr.json(),gp=gj.items&&gj.items[0]&&gj.items[0].volumeInfo&&gj.items[0].volumeInfo.pageCount;
+        if(gp&&!$("#fPages").value)$("#fPages").value=gp;}}catch(e){}
   }
   if(!$("#fPages").value)toast("쪽수 정보가 없어요. 직접 입력해 주세요.");
 }
