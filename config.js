@@ -2,16 +2,16 @@
 window.BOOKTOWER_CONFIG = {
   // 1) Firebase 콘솔 > 프로젝트 설정 > 내 앱 > 웹 앱의 firebaseConfig 값을 그대로 붙여넣기
   firebase: {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
+    apiKey: "AIzaSyCG40CiXE5Jx_sFP6WoKlN9Y8jZ-J44xoM",
+    authDomain: "bookmemory-6dd8c.firebaseapp.com",
+    projectId: "bookmemory-6dd8c",
+    storageBucket: "bookmemory-6dd8c.firebasestorage.app",
+    messagingSenderId: "974269125609",
+    appId: "1:974269125609:web:b9cdbc920cfb46e1eb7178"
   },
   // 2) (선택) 카카오 REST API 키. 넣으면 카카오(다음) 책 검색을 씁니다.
   //    쪽수는 카카오가 알려 주지 않아서 Google Books에서 찾아보고, 없으면 직접 입력합니다.
-  kakaoKey: "",
+  kakaoKey: "DHHOiJ_k67gCxSTCWQZ7t--LfZLXxgBnAAAAAQoNH9EAAAGh2weUE6huWkW__Nqy",
   // 3) (선택) 알라딘 TTB 키. 카카오 키가 비어 있을 때만 쓰입니다. 넣으면 한국 책 검색이 더 정확해지고 쪽수도 자동으로 채워져요.
   //    비워 두면 Google Books로 검색합니다.
   aladinKey: ""
